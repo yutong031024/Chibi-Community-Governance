@@ -4,8 +4,8 @@ A GIS-based Community Governance & Livelihood Service Platform for Chibi City.
 
 ## Planned Features
 
-- Citizen feedback
+- Citizen feedback and suggestions
 - Facility search
 - Spatial analysis
 - Governance dashboard
-- Heatmap analysis
+- Heatmap visualization
