@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
+
 from app import db
 from app.models import Feedback
 
@@ -17,17 +18,37 @@ feedback_bp = Blueprint(
 
 
 
-# =========================
+# ==================================================
+# 项目根目录
+# ==================================================
+
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
+
+
+
+# ==================================================
 # 文件路径
-# =========================
+# ==================================================
 
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = os.path.join(
+    BASE_DIR,
+    "uploads"
+)
 
-BACKUP_FILE = "data/feedback_backup.csv"
+
+BACKUP_FILE = os.path.join(
+    BASE_DIR,
+    "data",
+    "feedback_backup.csv"
+)
 
 
 
-# 创建上传文件夹
+# 创建必要文件夹
 
 os.makedirs(
     UPLOAD_FOLDER,
@@ -35,25 +56,25 @@ os.makedirs(
 )
 
 
+os.makedirs(
+    os.path.dirname(BACKUP_FILE),
+    exist_ok=True
+)
 
 
-# =========================
+
+
+
+# ==================================================
 # CSV备份函数
-# =========================
+# ==================================================
 
 def save_feedback_backup(feedback):
-
-
-    os.makedirs(
-        "data",
-        exist_ok=True
-    )
 
 
     file_exists = os.path.isfile(
         BACKUP_FILE
     )
-
 
 
     with open(
@@ -73,8 +94,6 @@ def save_feedback_backup(feedback):
         writer = csv.writer(f)
 
 
-
-        # 第一次创建文件时写标题
 
         if not file_exists:
 
@@ -151,10 +170,10 @@ def save_feedback_backup(feedback):
 
 
 
-# =========================
-# 提交反馈 API
-# =========================
 
+# ==================================================
+# 提交反馈 API
+# ==================================================
 
 @feedback_bp.route(
 
@@ -168,16 +187,13 @@ def submit_feedback():
 
 
 
-    # 接收 FormData
-
     data = request.form
 
 
 
-    # =========================
-    # 检查位置
-    # =========================
-
+    # --------------------------
+    # 获取位置
+    # --------------------------
 
     longitude = data.get(
         "longitude"
@@ -203,17 +219,17 @@ def submit_feedback():
 
 
 
-    # =========================
-    # 图片上传
-    # =========================
 
+
+    # --------------------------
+    # 图片上传
+    # --------------------------
 
     image_path = None
 
 
 
     if "photo" in request.files:
-
 
 
         file = request.files["photo"]
@@ -258,20 +274,27 @@ def submit_feedback():
 
 
 
-            image_path = filepath
+            # 保存相对路径到数据库
+
+            image_path = os.path.join(
+
+                "uploads",
+
+                filename
+
+            )
 
 
 
 
 
 
-    # =========================
-    # 创建反馈对象
-    # =========================
 
+    # --------------------------
+    # 创建反馈
+    # --------------------------
 
     feedback = Feedback(
-
 
 
         type=data.get(
@@ -279,11 +302,9 @@ def submit_feedback():
         ),
 
 
-
         category=data.get(
             "category"
         ),
-
 
 
         description=data.get(
@@ -291,11 +312,9 @@ def submit_feedback():
         ),
 
 
-
         longitude=float(
             longitude
         ),
-
 
 
         latitude=float(
@@ -303,11 +322,9 @@ def submit_feedback():
         ),
 
 
-
         address=data.get(
             "address"
         ),
-
 
 
         location_method=data.get(
@@ -315,11 +332,9 @@ def submit_feedback():
         ),
 
 
-
         contact=data.get(
             "contact"
         ),
-
 
 
         image_path=image_path
@@ -331,10 +346,10 @@ def submit_feedback():
 
 
 
-    # =========================
-    # 保存数据库
-    # =========================
 
+    # --------------------------
+    # 保存数据库
+    # --------------------------
 
     db.session.add(
         feedback
@@ -347,11 +362,9 @@ def submit_feedback():
 
 
 
-
-    # =========================
-    # 保存CSV备份
-    # =========================
-
+    # --------------------------
+    # CSV备份
+    # --------------------------
 
     save_feedback_backup(
         feedback
@@ -365,11 +378,68 @@ def submit_feedback():
 
 
         "message":
+
         "反馈提交成功",
 
 
         "id":
+
         feedback.id
 
 
     }),200
+
+
+
+
+
+
+
+# ==================================================
+# 下载CSV备份
+# ==================================================
+
+@feedback_bp.route(
+
+    "/download-backup",
+
+    methods=["GET"]
+
+)
+
+def download_backup():
+
+
+
+    if not os.path.exists(
+        BACKUP_FILE
+    ):
+
+
+        return jsonify({
+
+            "message":
+
+            "暂无备份数据"
+
+        }),404
+
+
+
+
+
+    return send_file(
+
+
+        BACKUP_FILE,
+
+
+        as_attachment=True,
+
+
+        download_name=
+
+        "feedback_backup.csv"
+
+
+    )
