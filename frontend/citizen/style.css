@@ -1,0 +1,425 @@
+html,
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    font-family: "Microsoft YaHei", sans-serif;
+
+    overflow: hidden;
+
+}
+
+
+
+/* =========================
+   顶部标题
+========================= */
+
+header {
+
+    height: 70px;
+
+    text-align: center;
+
+    background: #2c7be5;
+
+    color: white;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+}
+
+
+header h1 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+}
+
+
+header p {
+
+    margin: 5px 0 0;
+
+    font-size: 12px;
+
+}
+
+
+
+
+
+/* =========================
+   地图
+========================= */
+
+#map {
+
+    width: 100%;
+
+    height: calc(100vh - 170px);
+
+}
+
+
+
+
+
+/* =========================
+   底部功能栏
+========================= */
+
+.bottom-panel {
+
+    height: 100px;
+
+    display: flex;
+
+    justify-content: space-around;
+
+    align-items: center;
+
+    background: white;
+
+    box-shadow:
+    0 -2px 10px rgba(0,0,0,0.15);
+
+    position: relative;
+
+    z-index: 500;
+
+}
+
+
+
+
+
+/* =========================
+   通用按钮
+========================= */
+
+button {
+
+    padding: 12px 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    background: #2c7be5;
+
+    color: white;
+
+    cursor: pointer;
+
+}
+
+
+button:active {
+
+    transform: scale(0.95);
+
+}
+
+
+
+
+
+/* =========================
+   搜索窗口
+========================= */
+
+.search-panel {
+
+    position: absolute;
+
+    top: 85px;
+
+    left: 12px;
+
+    right: 12px;
+
+    z-index: 999;
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+.search-panel input {
+
+    flex: 1;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+}
+
+
+.search-panel button {
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+}
+
+
+
+
+
+/* 隐藏 */
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+
+
+
+/* =========================
+   居民反馈窗口
+========================= */
+
+.feedback-panel {
+
+
+    position: absolute;
+
+
+    bottom: 115px;
+
+
+    left: 10px;
+
+
+    right: 10px;
+
+
+    max-height: 65vh;
+
+
+    overflow-y: auto;
+
+
+    background: white;
+
+
+    padding: 20px;
+
+
+    border-radius: 15px;
+
+
+    z-index: 1000;
+
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.25);
+
+
+}
+
+
+
+
+
+.feedback-panel h2 {
+
+
+    font-size:18px;
+
+
+    margin-top:0;
+
+
+    text-align:center;
+
+
+}
+
+
+
+
+
+.feedback-panel label {
+
+
+    display:block;
+
+
+    margin-top:12px;
+
+
+    font-size:14px;
+
+
+}
+
+
+
+
+
+.feedback-panel input,
+.feedback-panel select,
+.feedback-panel textarea {
+
+
+    width:100%;
+
+
+    padding:10px;
+
+
+    margin-top:5px;
+
+
+    box-sizing:border-box;
+
+
+    border:1px solid #ddd;
+
+
+    border-radius:8px;
+
+
+    font-size:14px;
+
+
+}
+
+
+
+
+
+.feedback-panel textarea {
+
+
+    height:80px;
+
+
+    resize:none;
+
+
+}
+
+
+
+
+
+/* 提交和关闭按钮 */
+
+.feedback-panel button {
+
+
+    margin-top:15px;
+
+
+    width:48%;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   当前反馈位置
+========================= */
+
+
+.selected-location {
+
+
+    background:#f5f5f5;
+
+
+    padding:10px;
+
+
+    margin:10px 0;
+
+
+    border-radius:8px;
+
+
+    font-size:14px;
+
+
+    line-height:1.5;
+
+
+}
+
+
+
+
+
+/* =========================
+   手机端优化
+========================= */
+
+@media(max-width:600px){
+
+
+    header h1 {
+
+        font-size:18px;
+
+    }
+
+
+    .bottom-panel button {
+
+
+        font-size:13px;
+
+
+        padding:10px;
+
+
+    }
+
+
+    .feedback-panel {
+
+
+        left:5px;
+
+        right:5px;
+
+
+        bottom:110px;
+
+
+        max-height:70vh;
+
+
+    }
+
+
+}

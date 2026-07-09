@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>赤壁市民生服务平台</title>
+
+
+    <link rel="stylesheet" href="style.css">
+
+
+    <script>
+
+        window._AMapSecurityConfig = {
+
+            securityJsCode: "c87d03cad068927081bf2a0b07010b93"
+
+        };
+
+    </script>
+
+
+    <script src="https://webapi.amap.com/maps?v=2.0&key=083250db37c7858cc8e4b1a00145929e&plugin=AMap.Geolocation,AMap.AutoComplete,AMap.PlaceSearch,AMap.Geocoder"></script>
+
+
+</head>
+
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        赤壁市民生服务平台
+    </h1>
+
+
+    <p>
+        Chibi Community Governance Platform
+    </p>
+
+
+</header>
+
+
+
+
+<!-- 地图 -->
+
+<div id="map"></div>
+
+
+
+
+
+<!-- 搜索窗口 -->
+
+<div id="search-panel" class="search-panel hidden">
+
+
+    <input 
+        id="search-input"
+        type="text"
+        placeholder="搜索地点，如：赤壁火车站"
+    >
+
+
+    <button id="close-search-btn">
+        关闭
+    </button>
+
+
+</div>
+
+
+
+
+
+<!-- 底部功能栏 -->
+
+<div class="bottom-panel">
+
+
+    <button id="location-btn">
+        📍 我的位置
+    </button>
+
+
+    <button id="search-btn">
+        🔍 搜索设施
+    </button>
+
+
+    <button id="feedback-btn">
+        📢 我要反馈
+    </button>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- 居民反馈窗口 -->
+
+<div id="feedback-panel" class="feedback-panel hidden">
+
+
+    <h2>
+        📢 我要反映问题 / 提出建议
+    </h2>
+
+
+
+    <!-- 当前反馈位置 -->
+
+    <div id="selected-location" class="selected-location">
+
+        📍 尚未选择反馈位置
+
+    </div>
+
+
+
+
+
+    <label>
+        反馈性质
+    </label>
+
+
+    <select id="feedback-type">
+
+
+        <option value="issue">
+            🚨 问题
+        </option>
+
+
+        <option value="suggestion">
+            💡 建议
+        </option>
+
+
+    </select>
+
+
+
+
+
+
+
+    <label>
+        类别
+    </label>
+
+
+    <select id="category">
+
+
+        <option>
+            交通出行
+        </option>
+
+
+        <option>
+            医疗健康
+        </option>
+
+
+        <option>
+            商业服务
+        </option>
+
+
+        <option>
+            物流服务
+        </option>
+
+
+        <option>
+            公共设施
+        </option>
+
+
+        <option>
+            文化设施
+        </option>
+
+
+        <option>
+            教育设施
+        </option>
+
+
+        <option>
+            无障碍设施
+        </option>
+
+
+        <option>
+            环境卫生
+        </option>
+
+
+        <option>
+            其他
+        </option>
+
+
+    </select>
+
+
+
+
+
+
+
+    <label>
+        描述
+    </label>
+
+
+    <textarea
+        id="description"
+        placeholder="请输入问题或建议">
+    </textarea>
+
+
+
+
+
+
+
+    <label>
+        上传照片（可选）
+    </label>
+
+
+    <input
+
+        type="file"
+
+        id="photo"
+
+        accept="image/*"
+
+    >
+
+
+
+
+
+
+
+    <label>
+        联系方式（选填）
+    </label>
+
+
+    <input
+
+        id="contact"
+
+        placeholder="手机号或邮箱"
+
+    >
+
+
+
+
+
+
+
+    <button id="submit-feedback">
+
+        提交
+
+    </button>
+
+
+
+    <button id="close-feedback">
+
+        关闭
+
+    </button>
+
+
+
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>
