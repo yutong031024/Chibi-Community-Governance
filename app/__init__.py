@@ -14,22 +14,47 @@ def create_app():
     app = Flask(__name__)
 
 
+    # =========================
+    # 项目路径
+    # =========================
+
+    BASE_DIR = os.path.dirname(
+        os.path.dirname(
+            os.path.abspath(__file__)
+        )
+    )
+
+
+
+    FRONTEND_FOLDER = os.path.join(
+        BASE_DIR,
+        "frontend",
+        "citizen"
+    )
+
+
+    UPLOAD_FOLDER = os.path.join(
+        BASE_DIR,
+        "uploads"
+    )
+
+
 
     # =========================
     # 数据库配置
     # =========================
+
 
     database_url = os.environ.get(
         "DATABASE_URL"
     )
 
 
+
     if database_url:
 
 
         # Render PostgreSQL
-        # Render 有时返回 postgres://
-        # SQLAlchemy 需要 postgresql://
 
         if database_url.startswith(
             "postgres://"
@@ -51,12 +76,14 @@ def create_app():
     else:
 
 
-        # 本地开发 SQLite
+        # 本地 SQLite
 
         app.config[
             "SQLALCHEMY_DATABASE_URI"
         ] = (
+
             "sqlite:///../data/chibi.db"
+
         )
 
 
@@ -69,23 +96,25 @@ def create_app():
 
     # 初始化数据库
 
-    db.init_app(app)
-
+    db.init_app(
+        app
+    )
 
 
 
 
     # =========================
-    # 居民端网页
+    # 居民端主页
     # =========================
 
 
     @app.route("/")
     def home():
 
+
         return send_from_directory(
 
-            "../frontend/citizen",
+            FRONTEND_FOLDER,
 
             "index.html"
 
@@ -108,7 +137,35 @@ def create_app():
 
         return send_from_directory(
 
-            "../frontend/citizen",
+            FRONTEND_FOLDER,
+
+            filename
+
+        )
+
+
+
+
+
+    # =========================
+    # 上传图片访问
+    # =========================
+    #
+    # 示例：
+    # /uploads/20260710_photo.jpg
+    #
+    # =========================
+
+
+    @app.route(
+        "/uploads/<filename>"
+    )
+    def uploaded_files(filename):
+
+
+        return send_from_directory(
+
+            UPLOAD_FOLDER,
 
             filename
 
@@ -126,8 +183,11 @@ def create_app():
     from app.routes import feedback_bp
 
 
+
     app.register_blueprint(
+
         feedback_bp
+
     )
 
 
