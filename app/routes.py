@@ -441,3 +441,15 @@ def download_backup():
 
 
     )
+
+@feedback_bp.route(
+    "/api/debug/count",
+    methods=["GET"]
+)
+def debug_count():
+
+    count = Feedback.query.count()
+
+    return jsonify({
+        "total_feedback": count
+    })
