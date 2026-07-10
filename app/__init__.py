@@ -1,8 +1,9 @@
-from flask import Flask, send_from_directory
+from flask import Flask, app, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
 
 import os
-
+load_dotenv()
 
 db = SQLAlchemy()
 
@@ -185,9 +186,13 @@ def create_app():
 
 
     app.register_blueprint(
-
         feedback_bp
+    )
 
+    from app.admin_routes import admin_bp
+
+    app.register_blueprint(
+        admin_bp
     )
 
 

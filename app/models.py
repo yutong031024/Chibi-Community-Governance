@@ -76,3 +76,57 @@ class Feedback(db.Model):
         db.DateTime,
         default=datetime.now
     )
+
+class ServiceFacility(db.Model):
+
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+
+    name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+
+    category = db.Column(
+        db.String(50),
+        nullable=False
+    )
+
+
+    longitude = db.Column(
+        db.Float,
+        nullable=False
+    )
+
+
+    latitude = db.Column(
+        db.Float,
+        nullable=False
+    )
+
+
+    address = db.Column(
+        db.String(200)
+    )
+
+
+    source = db.Column(
+        db.String(50),
+        default="高德POI"
+    )
+
+
+    description = db.Column(
+        db.Text
+    )
+
+
+    created_time = db.Column(
+        db.DateTime,
+        default=datetime.now
+    )

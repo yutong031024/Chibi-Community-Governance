@@ -440,3 +440,72 @@ def download_backup():
 
 
     )
+
+# ==================================================
+# 调试：查看数据库数量
+# ==================================================
+
+@feedback_bp.route(
+    "/api/debug/count",
+    methods=["GET"]
+)
+def debug_count():
+
+
+    count = Feedback.query.count()
+
+
+    return jsonify({
+
+        "total_feedback": count
+
+    })
+
+
+
+
+
+# ==================================================
+# 调试：查看最近提交
+# ==================================================
+
+@feedback_bp.route(
+    "/api/debug/latest",
+    methods=["GET"]
+)
+def debug_latest():
+
+
+    feedbacks = Feedback.query.order_by(
+
+        Feedback.created_time.desc()
+
+    ).limit(10).all()
+
+
+
+    result = []
+
+
+    for f in feedbacks:
+
+
+        result.append({
+
+            "id": f.id,
+
+            "time": str(
+                f.created_time
+            ),
+
+            "category": f.category,
+
+            "description": f.description,
+
+            "image": f.image_path
+
+        })
+
+
+
+    return jsonify(result)

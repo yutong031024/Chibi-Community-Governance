@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>
+赤壁民生服务管理后台
+</title>
+
+
+<link rel="stylesheet"
+href="/admin/admin.css">
+
+
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+
+
+<script src="
+https://unpkg.com/leaflet/dist/leaflet.js">
+</script>
+
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>
+赤壁民生服务管理后台
+</h1>
+
+<button id="toggle-sidebar">
+☰
+</button>
+
+</header>
+
+
+
+
+<!-- 图层侧边栏 -->
+
+<div id="sidebar">
+
+
+<h2>
+图层控制
+</h2>
+
+
+
+<h3>
+📍 反馈问题
+</h3>
+
+
+<div id="feedback-layers"></div>
+
+
+
+
+<hr>
+
+
+
+<h3>
+🏢 服务设施
+</h3>
+
+
+<div id="facility-layers"></div>
+
+
+
+</div>
+
+
+
+
+
+<div id="map"></div>
+
+
+
+
+
+<script src="/admin/admin.js"></script>
+
+
+</body>
+
+
+</html>
