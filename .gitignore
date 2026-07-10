@@ -1,7 +1,12 @@
 venv/
 __pycache__/
 *.pyc
-
 .env
-
 uploads/
+
+# Database
+data/chibi.db
+data/*.db
+
+# CSV backups
+data/*.csv
