@@ -620,7 +620,7 @@ function closeFeedback(){
 // 提交反馈
 // =========================
 
-function submitFeedback(){
+async function submitFeedback(){
 
 
 
@@ -704,11 +704,43 @@ document.getElementById(
 ).files[0];
 
 
+
 if(photo){
 
-    formData.append(
-        "photo",
+
+    console.log(
+        "原始图片:",
+        (
+            photo.size / 1024 / 1024
+        ).toFixed(2),
+        "MB"
+    );
+
+
+
+    let compressedPhoto =
+    await compressImage(
         photo
+    );
+
+
+
+    console.log(
+        "压缩后图片:",
+        (
+            compressedPhoto.size / 1024 / 1024
+        ).toFixed(2),
+        "MB"
+    );
+
+
+
+    formData.append(
+
+        "photo",
+
+        compressedPhoto
+
     );
 
 }
@@ -841,5 +873,141 @@ function clearFeedbackForm(){
     .innerHTML =
     "📍 尚未选择反馈位置";
 
+
+}
+
+// =================================
+// 图片压缩函数
+// =================================
+
+function compressImage(
+    file,
+    maxWidth = 1280,
+    quality = 0.7
+){
+
+    return new Promise(
+        (resolve)=>{
+
+
+        const img = new Image();
+
+
+        const reader =
+        new FileReader();
+
+
+
+        reader.onload = function(e){
+
+            img.src =
+            e.target.result;
+
+        };
+
+
+
+        img.onload = function(){
+
+
+            let canvas =
+            document.createElement(
+                "canvas"
+            );
+
+
+
+            let scale =
+            Math.min(
+
+                maxWidth / img.width,
+
+                1
+
+            );
+
+
+
+            canvas.width =
+            img.width * scale;
+
+
+
+            canvas.height =
+            img.height * scale;
+
+
+
+            let ctx =
+            canvas.getContext(
+                "2d"
+            );
+
+
+
+            ctx.drawImage(
+
+                img,
+
+                0,
+
+                0,
+
+                canvas.width,
+
+                canvas.height
+
+            );
+
+
+
+            canvas.toBlob(
+
+
+                function(blob){
+
+
+                    let newFile =
+                    new File(
+
+                        [blob],
+
+                        file.name.replace(
+    /\.[^/.]+$/,
+    ".jpg"
+),
+
+                        {
+
+                            type:
+                            "image/jpeg"
+
+                        }
+
+                    );
+
+
+                    resolve(
+                        newFile
+                    );
+
+
+                },
+
+
+                "image/jpeg",
+
+                quality
+
+            );
+
+        };
+
+
+
+        reader.readAsDataURL(file);
+
+
+    });
 
 }
