@@ -289,20 +289,19 @@ def submit_feedback():
 
     feedback = Feedback(
 
-    type=data.get(
-        "type"
-    ),
+        type=data.get(
+            "type"
+        ),
 
 
-    respondent_type=data.get(
-        "respondent_type",
-        "其他"
-    ),
+        respondent_type=data.get(
+            "respondent_type",
+            "其他"
+        ),
 
-
-    category=data.get(
-        "category"
-    ),
+        category=data.get(
+            "category"
+        ),
 
 
         description=data.get(
