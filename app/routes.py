@@ -104,6 +104,8 @@ def save_feedback_backup(feedback):
 
                 "type",
 
+                "respondent_type",
+
                 "category",
 
                 "description",
@@ -132,36 +134,27 @@ def save_feedback_backup(feedback):
 
             feedback.created_time,
 
-
             feedback.type,
 
+            feedback.respondent_type,
 
             feedback.category,
 
-
             feedback.description,
-
 
             feedback.longitude,
 
-
             feedback.latitude,
-
 
             feedback.address,
 
-
             feedback.location_method,
-
 
             feedback.contact,
 
-
             feedback.image_path,
 
-
             feedback.status
-
 
         ])
 
@@ -296,15 +289,20 @@ def submit_feedback():
 
     feedback = Feedback(
 
+    type=data.get(
+        "type"
+    ),
 
-        type=data.get(
-            "type"
-        ),
+
+    respondent_type=data.get(
+        "respondent_type",
+        "其他"
+    ),
 
 
-        category=data.get(
-            "category"
-        ),
+    category=data.get(
+        "category"
+    ),
 
 
         description=data.get(

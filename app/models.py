@@ -15,6 +15,12 @@ class Feedback(db.Model):
         nullable=False
     )
 
+    respondent_type = db.Column(
+    db.String(20),
+    nullable=False,
+    default="其他"
+)
+
 
     category = db.Column(
         db.String(50),

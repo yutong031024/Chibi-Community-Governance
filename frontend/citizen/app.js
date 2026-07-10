@@ -650,6 +650,12 @@ formData.append(
     ).value
 );
 
+formData.append(
+    "respondent_type",
+    document.getElementById(
+        "respondent-type"
+    ).value
+);
 
 formData.append(
     "category",
