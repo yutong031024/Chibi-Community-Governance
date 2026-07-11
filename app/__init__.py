@@ -1,16 +1,15 @@
-from flask import Flask, app, send_from_directory
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 
 import os
+
 load_dotenv()
 
 db = SQLAlchemy()
 
 
-
 def create_app():
-
 
     app = Flask(__name__)
 
@@ -26,7 +25,6 @@ def create_app():
     )
 
 
-
     FRONTEND_FOLDER = os.path.join(
         BASE_DIR,
         "frontend",
@@ -40,20 +38,17 @@ def create_app():
     )
 
 
-
     # =========================
     # 数据库配置
     # =========================
-
 
     database_url = os.environ.get(
         "DATABASE_URL"
     )
 
 
-
     if database_url:
-
+        print("===== USING POSTGRESQL DATABASE =====")
 
         # Render PostgreSQL
 
@@ -73,20 +68,16 @@ def create_app():
         ] = database_url
 
 
-
     else:
+        print("===== USING SQLITE DATABASE =====")
 
-
-        # 本地 SQLite
+        # 本地开发 SQLite
 
         app.config[
             "SQLALCHEMY_DATABASE_URI"
         ] = (
-
             "sqlite:///../data/chibi.db"
-
         )
-
 
 
     app.config[
@@ -94,107 +85,74 @@ def create_app():
     ] = False
 
 
-
+    # =========================
     # 初始化数据库
+    # =========================
 
     db.init_app(
         app
     )
 
 
-
-
     # =========================
     # 居民端主页
     # =========================
 
-
     @app.route("/")
     def home():
 
-
         return send_from_directory(
-
             FRONTEND_FOLDER,
-
             "index.html"
-
         )
-
-
-
 
 
     # =========================
     # 前端静态文件
     # =========================
 
-
     @app.route(
         "/<path:filename>"
     )
     def static_files(filename):
 
-
         return send_from_directory(
-
             FRONTEND_FOLDER,
-
             filename
-
         )
-
-
-
 
 
     # =========================
     # 上传图片访问
     # =========================
-    #
-    # 示例：
-    # /uploads/20260710_photo.jpg
-    #
-    # =========================
-
 
     @app.route(
         "/uploads/<filename>"
     )
     def uploaded_files(filename):
 
-
         return send_from_directory(
-
             UPLOAD_FOLDER,
-
             filename
-
         )
 
 
-
-
-
     # =========================
-    # API接口
+    # 注册 API
     # =========================
-
 
     from app.routes import feedback_bp
-
-
 
     app.register_blueprint(
         feedback_bp
     )
+
 
     from app.admin_routes import admin_bp
 
     app.register_blueprint(
         admin_bp
     )
-
 
 
     return app
