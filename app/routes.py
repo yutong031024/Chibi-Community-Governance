@@ -3,11 +3,9 @@ from flask import Blueprint, request, jsonify, send_file
 from app import db
 from app.models import Feedback
 
-import os
 import csv
 
-from datetime import datetime
-from werkzeug.utils import secure_filename
+import cloudinary.uploader
 
 from io import StringIO, BytesIO
 
@@ -19,36 +17,6 @@ feedback_bp = Blueprint(
 
 
 # ==================================================
-# 项目根目录
-# ==================================================
-
-BASE_DIR = os.path.dirname(
-    os.path.dirname(
-        os.path.abspath(__file__)
-    )
-)
-
-
-# ==================================================
-# 文件路径
-# ==================================================
-
-UPLOAD_FOLDER = os.path.join(
-    BASE_DIR,
-    "uploads"
-)
-
-
-# 创建上传文件夹
-
-os.makedirs(
-    UPLOAD_FOLDER,
-    exist_ok=True
-)
-
-
-
-# ==================================================
 # 提交反馈 API
 # ==================================================
 
@@ -56,7 +24,6 @@ os.makedirs(
     "/api/feedback",
     methods=["POST"]
 )
-
 def submit_feedback():
 
 
@@ -88,7 +55,7 @@ def submit_feedback():
 
 
     # --------------------------
-    # 图片上传
+    # 图片上传 Cloudinary
     # --------------------------
 
     image_path = None
@@ -103,43 +70,13 @@ def submit_feedback():
         if file.filename != "":
 
 
-            filename = (
-
-                datetime.now()
-
-                .strftime(
-                    "%Y%m%d_%H%M%S_"
-                )
-
-                +
-
-                secure_filename(
-                    file.filename
-                )
-
+            result = cloudinary.uploader.upload(
+                file
             )
 
 
-            filepath = os.path.join(
-
-                UPLOAD_FOLDER,
-
-                filename
-
-            )
-
-
-            file.save(
-                filepath
-            )
-
-
-            image_path = os.path.join(
-
-                "uploads",
-
-                filename
-
+            image_path = result.get(
+                "secure_url"
             )
 
 
@@ -199,7 +136,6 @@ def submit_feedback():
 
         image_path=image_path
 
-
     )
 
 
@@ -233,14 +169,13 @@ def submit_feedback():
 
 # ==================================================
 # 下载 CSV
-# 从数据库实时生成
+# 从 PostgreSQL 实时生成
 # ==================================================
 
 @feedback_bp.route(
     "/download-backup",
     methods=["GET"]
 )
-
 def download_backup():
 
 
@@ -279,7 +214,7 @@ def download_backup():
 
         "contact",
 
-        "image_path",
+        "image_url",
 
         "status"
 
@@ -331,7 +266,6 @@ def download_backup():
 
             f.status
 
-
         ])
 
 
@@ -342,15 +276,16 @@ def download_backup():
 
     return send_file(
 
-    BytesIO(
-        output.getvalue().encode("utf-8-sig")
-    ),
+        BytesIO(
+            output.getvalue().encode(
+                "utf-8-sig"
+            )
+        ),
 
-    mimetype="text/csv",
+        mimetype="text/csv",
 
-    as_attachment=True,
+        as_attachment=True,
 
-    download_name="feedback_backup.csv"
+        download_name="feedback_backup.csv"
 
-)
-
+    )
