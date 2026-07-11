@@ -2,12 +2,9 @@ import requests
 import os
 
 
-
 AMAP_KEY = os.environ.get(
     "AMAP_WEB_KEY"
 )
-
-
 
 
 
@@ -20,9 +17,7 @@ FACILITY_CONFIG = {
 
     "medical": {
 
-
         "name": "医疗设施",
-
 
         "keywords": [
 
@@ -39,12 +34,9 @@ FACILITY_CONFIG = {
     },
 
 
-
     "toilet": {
 
-
         "name": "公共厕所",
-
 
         "keywords": [
 
@@ -61,12 +53,9 @@ FACILITY_CONFIG = {
     },
 
 
-
     "transport": {
 
-
         "name": "交通设施",
-
 
         "keywords": [
 
@@ -79,12 +68,9 @@ FACILITY_CONFIG = {
     },
 
 
-
     "commercial": {
 
-
         "name": "商业设施",
-
 
         "keywords": [
 
@@ -99,12 +85,9 @@ FACILITY_CONFIG = {
     },
 
 
-
     "culture": {
 
-
         "name": "文化设施",
-
 
         "keywords": [
 
@@ -119,12 +102,9 @@ FACILITY_CONFIG = {
     },
 
 
-
     "education": {
 
-
         "name": "教育设施",
-
 
         "keywords": [
 
@@ -136,12 +116,14 @@ FACILITY_CONFIG = {
 
     }
 
+
 }
 
 
 
-
-
+# =========================
+# 高德 POI 搜索
+# =========================
 
 
 def search_poi(keyword):
@@ -152,7 +134,6 @@ def search_poi(keyword):
         "https://restapi.amap.com/v3/place/text"
 
     )
-
 
 
     params = {
@@ -166,8 +147,13 @@ def search_poi(keyword):
         keyword,
 
 
+        # 限制赤壁市
+        "city":
+        "421281",
+
+
         "citylimit":
-        False,
+        True,
 
 
         "extensions":
@@ -185,7 +171,6 @@ def search_poi(keyword):
 
 
 
-
     response = requests.get(
 
         url,
@@ -197,10 +182,7 @@ def search_poi(keyword):
     )
 
 
-
     data = response.json()
-
-
 
     results = []
 
@@ -209,12 +191,10 @@ def search_poi(keyword):
     if data.get("status") == "1":
 
 
-
         for poi in data.get(
             "pois",
             []
         ):
-
 
 
             location = poi.get(
@@ -222,9 +202,7 @@ def search_poi(keyword):
             )
 
 
-
             if location:
-
 
 
                 lng, lat = location.split(",")
@@ -233,9 +211,10 @@ def search_poi(keyword):
 
                 results.append({
 
-
                     "name":
-                    poi.get("name"),
+                    poi.get(
+                        "name"
+                    ),
 
 
                     "longitude":
@@ -247,11 +226,11 @@ def search_poi(keyword):
 
 
                     "address":
-                    poi.get("address")
-
+                    poi.get(
+                        "address"
+                    )
 
                 })
-
 
 
     return results
