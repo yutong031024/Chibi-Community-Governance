@@ -354,21 +354,3 @@ def download_backup():
 
 )
 
-@feedback_bp.route(
-    "/api/debug/latest",
-    methods=["GET"]
-)
-def debug_latest():
-
-    feedbacks = Feedback.query.order_by(
-        Feedback.id.desc()
-    ).limit(5).all()
-
-    return jsonify([
-        {
-            "id": f.id,
-            "description": f.description,
-            "time": str(f.created_time)
-        }
-        for f in feedbacks
-    ])
