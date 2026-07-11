@@ -1,12 +1,20 @@
+# Python
 venv/
 __pycache__/
 *.pyc
+
+# Environment
 .env
+
+# User uploaded files
 uploads/
 
-# Database
-data/chibi.db
+# Local database
 data/*.db
 
 # CSV backups
 data/*.csv
+
+# Test files
+*.http
+test*.py

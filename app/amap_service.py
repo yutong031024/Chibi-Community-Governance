@@ -17,7 +17,7 @@ FACILITY_CONFIG = {
 
     "medical": {
 
-        "name": "医疗设施",
+        "name": "医疗健康",
 
         "keywords": [
 
@@ -34,32 +34,16 @@ FACILITY_CONFIG = {
     },
 
 
-    "toilet": {
-
-        "name": "公共厕所",
-
-        "keywords": [
-
-            "公共厕所",
-
-            "卫生间",
-
-            "洗手间",
-
-            "旅游厕所"
-
-        ]
-
-    },
-
 
     "transport": {
 
-        "name": "交通设施",
+        "name": "交通出行",
 
         "keywords": [
 
             "公交站",
+
+            "公交站台",
 
             "停车场"
 
@@ -68,9 +52,10 @@ FACILITY_CONFIG = {
     },
 
 
+
     "commercial": {
 
-        "name": "商业设施",
+        "name": "商业服务",
 
         "keywords": [
 
@@ -78,11 +63,72 @@ FACILITY_CONFIG = {
 
             "便利店",
 
-            "商场"
+            "商场",
+
+            "市场"
 
         ]
 
     },
+
+
+
+    "logistics": {
+
+        "name": "物流服务",
+
+        "keywords": [
+
+            "快递点",
+
+            "菜鸟驿站",
+
+            "物流公司",
+
+            "快递服务"
+
+        ]
+
+    },
+
+
+
+    "public": {
+
+        "name": "公共设施",
+
+        "keywords": [
+
+            "公共厕所",
+
+            "充电宝",
+
+            "共享充电宝",
+
+            "服务中心"
+
+        ]
+
+    },
+
+
+
+    "environment": {
+
+        "name": "环境卫生",
+
+        "keywords": [
+
+            "垃圾站",
+
+            "垃圾处理站",
+
+            "环卫站"
+
+        ]
+
+    },
+
 
 
     "culture": {
@@ -95,11 +141,14 @@ FACILITY_CONFIG = {
 
             "博物馆",
 
-            "图书馆"
+            "图书馆",
+
+            "纪念馆"
 
         ]
 
     },
+
 
 
     "education": {
@@ -110,7 +159,41 @@ FACILITY_CONFIG = {
 
             "学校",
 
-            "幼儿园"
+            "幼儿园",
+
+            "培训机构"
+
+        ]
+
+    },
+
+
+
+    "accessibility": {
+
+        "name": "无障碍设施",
+
+        "keywords": [
+
+            "无障碍卫生间",
+
+            "无障碍通道",
+
+            "残疾人设施"
+
+        ]
+
+    },
+
+
+
+    "other": {
+
+        "name": "其他",
+
+        "keywords": [
+
+            "服务点"
 
         ]
 
@@ -118,6 +201,8 @@ FACILITY_CONFIG = {
 
 
 }
+
+
 
 
 
@@ -136,6 +221,7 @@ def search_poi(keyword):
     )
 
 
+
     params = {
 
 
@@ -147,7 +233,7 @@ def search_poi(keyword):
         keyword,
 
 
-        # 限制赤壁市
+        # 赤壁市行政代码
         "city":
         "421281",
 
@@ -167,6 +253,7 @@ def search_poi(keyword):
         "page":
         1
 
+
     }
 
 
@@ -182,7 +269,10 @@ def search_poi(keyword):
     )
 
 
+
     data = response.json()
+
+
 
     results = []
 
@@ -191,10 +281,12 @@ def search_poi(keyword):
     if data.get("status") == "1":
 
 
+
         for poi in data.get(
             "pois",
             []
         ):
+
 
 
             location = poi.get(
@@ -202,7 +294,9 @@ def search_poi(keyword):
             )
 
 
+
             if location:
+
 
 
                 lng, lat = location.split(",")
@@ -211,6 +305,7 @@ def search_poi(keyword):
 
                 results.append({
 
+
                     "name":
                     poi.get(
                         "name"
@@ -218,11 +313,15 @@ def search_poi(keyword):
 
 
                     "longitude":
-                    float(lng),
+                    float(
+                        lng
+                    ),
 
 
                     "latitude":
-                    float(lat),
+                    float(
+                        lat
+                    ),
 
 
                     "address":
@@ -231,6 +330,7 @@ def search_poi(keyword):
                     )
 
                 })
+
 
 
     return results
