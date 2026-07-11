@@ -9,13 +9,13 @@ import csv
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
+from io import StringIO, BytesIO
 
 
 feedback_bp = Blueprint(
     "feedback",
     __name__
 )
-
 
 
 # ==================================================
@@ -29,7 +29,6 @@ BASE_DIR = os.path.dirname(
 )
 
 
-
 # ==================================================
 # 文件路径
 # ==================================================
@@ -40,127 +39,12 @@ UPLOAD_FOLDER = os.path.join(
 )
 
 
-BACKUP_FILE = os.path.join(
-    BASE_DIR,
-    "data",
-    "feedback_backup.csv"
-)
-
-
-
-# 创建必要文件夹
+# 创建上传文件夹
 
 os.makedirs(
     UPLOAD_FOLDER,
     exist_ok=True
 )
-
-
-os.makedirs(
-    os.path.dirname(BACKUP_FILE),
-    exist_ok=True
-)
-
-
-
-
-
-# ==================================================
-# CSV备份函数
-# ==================================================
-
-def save_feedback_backup(feedback):
-
-
-    file_exists = os.path.isfile(
-        BACKUP_FILE
-    )
-
-
-    with open(
-
-        BACKUP_FILE,
-
-        "a",
-
-        newline="",
-
-        encoding="utf-8-sig"
-
-    ) as f:
-
-
-
-        writer = csv.writer(f)
-
-
-
-        if not file_exists:
-
-
-            writer.writerow([
-
-                "time",
-
-                "type",
-
-                "respondent_type",
-
-                "category",
-
-                "description",
-
-                "longitude",
-
-                "latitude",
-
-                "address",
-
-                "location_method",
-
-                "contact",
-
-                "image_path",
-
-                "status"
-
-            ])
-
-
-
-
-        writer.writerow([
-
-
-            feedback.created_time,
-
-            feedback.type,
-
-            feedback.respondent_type,
-
-            feedback.category,
-
-            feedback.description,
-
-            feedback.longitude,
-
-            feedback.latitude,
-
-            feedback.address,
-
-            feedback.location_method,
-
-            feedback.contact,
-
-            feedback.image_path,
-
-            feedback.status
-
-        ])
-
-
-
-
 
 
 
@@ -169,19 +53,14 @@ def save_feedback_backup(feedback):
 # ==================================================
 
 @feedback_bp.route(
-
     "/api/feedback",
-
     methods=["POST"]
-
 )
 
 def submit_feedback():
 
 
-
     data = request.form
-
 
 
     # --------------------------
@@ -192,15 +71,12 @@ def submit_feedback():
         "longitude"
     )
 
-
     latitude = data.get(
         "latitude"
     )
 
 
-
     if not longitude or not latitude:
-
 
         return jsonify({
 
@@ -211,15 +87,11 @@ def submit_feedback():
 
 
 
-
-
-
     # --------------------------
     # 图片上传
     # --------------------------
 
     image_path = None
-
 
 
     if "photo" in request.files:
@@ -228,9 +100,7 @@ def submit_feedback():
         file = request.files["photo"]
 
 
-
         if file.filename != "":
-
 
 
             filename = (
@@ -250,7 +120,6 @@ def submit_feedback():
             )
 
 
-
             filepath = os.path.join(
 
                 UPLOAD_FOLDER,
@@ -260,14 +129,10 @@ def submit_feedback():
             )
 
 
-
             file.save(
                 filepath
             )
 
-
-
-            # 保存相对路径到数据库
 
             image_path = os.path.join(
 
@@ -279,15 +144,12 @@ def submit_feedback():
 
 
 
-
-
-
-
     # --------------------------
     # 创建反馈
     # --------------------------
 
     feedback = Feedback(
+
 
         type=data.get(
             "type"
@@ -298,6 +160,7 @@ def submit_feedback():
             "respondent_type",
             "其他"
         ),
+
 
         category=data.get(
             "category"
@@ -341,11 +204,8 @@ def submit_feedback():
 
 
 
-
-
-
     # --------------------------
-    # 保存数据库
+    # 保存 PostgreSQL
     # --------------------------
 
     db.session.add(
@@ -357,32 +217,13 @@ def submit_feedback():
 
 
 
-
-
-    # --------------------------
-    # CSV备份
-    # --------------------------
-
-    save_feedback_backup(
-        feedback
-    )
-
-
-
-
-
     return jsonify({
 
-
         "message":
-
         "反馈提交成功",
 
-
         "id":
-
         feedback.id
-
 
     }),200
 
@@ -390,53 +231,144 @@ def submit_feedback():
 
 
 
-
-
 # ==================================================
-# 下载CSV备份
+# 下载 CSV
+# 从数据库实时生成
 # ==================================================
 
 @feedback_bp.route(
-
     "/download-backup",
-
     methods=["GET"]
-
 )
 
 def download_backup():
 
 
-
-    if not os.path.exists(
-        BACKUP_FILE
-    ):
+    feedbacks = Feedback.query.all()
 
 
-        return jsonify({
-
-            "message":
-
-            "暂无备份数据"
-
-        }),404
+    output = StringIO()
 
 
+    writer = csv.writer(
+        output
+    )
+
+
+    writer.writerow([
+
+        "id",
+
+        "time",
+
+        "type",
+
+        "respondent_type",
+
+        "category",
+
+        "description",
+
+        "longitude",
+
+        "latitude",
+
+        "address",
+
+        "location_method",
+
+        "contact",
+
+        "image_path",
+
+        "status"
+
+    ])
+
+
+
+    for f in feedbacks:
+
+
+        writer.writerow([
+
+
+            f.id,
+
+
+            f.created_time,
+
+
+            f.type,
+
+
+            f.respondent_type,
+
+
+            f.category,
+
+
+            f.description,
+
+
+            f.longitude,
+
+
+            f.latitude,
+
+
+            f.address,
+
+
+            f.location_method,
+
+
+            f.contact,
+
+
+            f.image_path,
+
+
+            f.status
+
+
+        ])
+
+
+
+    output.seek(0)
 
 
 
     return send_file(
 
+    BytesIO(
+        output.getvalue().encode("utf-8-sig")
+    ),
 
-        BACKUP_FILE,
+    mimetype="text/csv",
 
+    as_attachment=True,
 
-        as_attachment=True,
+    download_name="feedback_backup.csv"
 
+)
 
-        download_name=
+@feedback_bp.route(
+    "/api/debug/latest",
+    methods=["GET"]
+)
+def debug_latest():
 
-        "feedback_backup.csv"
+    feedbacks = Feedback.query.order_by(
+        Feedback.id.desc()
+    ).limit(5).all()
 
-
-    )
+    return jsonify([
+        {
+            "id": f.id,
+            "description": f.description,
+            "time": str(f.created_time)
+        }
+        for f in feedbacks
+    ])
