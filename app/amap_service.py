@@ -17,7 +17,7 @@ FACILITY_CONFIG = {
 
     "medical": {
 
-        "name": "医疗健康",
+        "name": "医疗设施",
 
         "keywords": [
 
@@ -55,7 +55,7 @@ FACILITY_CONFIG = {
 
     "commercial": {
 
-        "name": "商业服务",
+        "name": "商业设施",
 
         "keywords": [
 
@@ -75,7 +75,7 @@ FACILITY_CONFIG = {
 
     "logistics": {
 
-        "name": "物流服务",
+        "name": "物流设施",
 
         "keywords": [
 
@@ -202,10 +202,6 @@ FACILITY_CONFIG = {
 
 }
 
-
-
-
-
 # =========================
 # 高德 POI 搜索
 # =========================
@@ -221,71 +217,95 @@ def search_poi(keyword):
     )
 
 
-
-    params = {
-
-
-        "key":
-        AMAP_KEY,
-
-
-        "keywords":
-        keyword,
-
-
-        # 赤壁市行政代码
-        "city":
-        "421281",
-
-
-        "citylimit":
-        True,
-
-
-        "extensions":
-        "all",
-
-
-        "offset":
-        25,
-
-
-        "page":
-        1
-
-
-    }
-
-
-
-    response = requests.get(
-
-        url,
-
-        params=params,
-
-        timeout=10
-
-    )
-
-
-
-    data = response.json()
-
-
-
     results = []
 
 
-
-    if data.get("status") == "1":
-
+    page = 1
 
 
-        for poi in data.get(
+    while True:
+
+
+        params = {
+
+
+            "key":
+            AMAP_KEY,
+
+
+            "keywords":
+            keyword,
+
+
+            # 赤壁市行政代码
+            "city":
+            "421281",
+
+
+            "citylimit":
+            True,
+
+
+            "extensions":
+            "all",
+
+
+            # 最大50条
+            "offset":
+            50,
+
+
+            "page":
+            page
+
+
+        }
+
+
+
+        response = requests.get(
+
+            url,
+
+            params=params,
+
+            timeout=10
+
+        )
+
+
+
+        data = response.json()
+
+        total = int(
+    data.get(
+        "count",
+        0
+    )
+)
+
+
+
+        if data.get("status") != "1":
+
+            break
+
+
+
+        pois = data.get(
             "pois",
             []
-        ):
+        )
+
+
+
+        if not pois:
+
+            break
+
+
+
+        for poi in pois:
 
 
 
@@ -294,13 +314,10 @@ def search_poi(keyword):
             )
 
 
-
             if location:
 
 
-
                 lng, lat = location.split(",")
-
 
 
                 results.append({
@@ -330,6 +347,28 @@ def search_poi(keyword):
                     )
 
                 })
+
+
+
+        # 如果返回数量不足50，
+        # 说明已经到最后一页
+
+        # 根据高德返回总数量判断是否结束
+
+        if page >= 5:
+
+            break
+
+
+    # 防止异常分页
+
+        if page >= 10:
+
+            break
+
+
+
+        page += 1
 
 
 

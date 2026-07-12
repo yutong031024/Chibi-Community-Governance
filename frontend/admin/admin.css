@@ -10,28 +10,6 @@ overflow:hidden;
 
 }
 
-
-
-header {
-
-height:60px;
-
-background:#2c7be5;
-
-color:white;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-position:relative;
-
-}
-
-
-
 header h1 {
 
 font-size:22px;
@@ -65,17 +43,21 @@ cursor:pointer;
 
 #map {
 
-height:calc(100vh - 60px);
+position:absolute;
 
-width:100%;
+top:60px;
+
+bottom:0;
+
+left:0;
+
+right:0;
 
 }
 
 
-
-
 #sidebar {
-
+    padding-top:20px;
 
 position:absolute;
 
@@ -83,30 +65,15 @@ top:60px;
 
 left:0;
 
+height:calc(100% - 60px);
 
-width:260px;
-
-
-height:calc(100vh - 60px);
-
+width:300px;
 
 background:white;
 
-
 z-index:999;
 
-
-padding:15px;
-
-
-box-shadow:2px 0 8px rgba(0,0,0,0.2);
-
-
 overflow-y:auto;
-
-
-transition:0.3s;
-
 
 }
 
@@ -181,6 +148,1132 @@ font-size:18px;
 
 
 margin-right:6px;
+
+
+}
+
+/* =====================
+Dashboard
+===================== */
+
+
+#dashboard-modal {
+
+
+display:none;
+
+
+position:fixed;
+
+
+top:0;
+
+left:0;
+
+
+width:100%;
+
+height:100%;
+
+
+background:
+
+rgba(0,0,0,0.4);
+
+
+z-index:2000;
+
+
+}
+
+
+
+.dashboard-box {
+
+
+background:white;
+
+
+width:420px;
+
+
+max-height:80vh;
+
+
+overflow:auto;
+
+
+position:absolute;
+
+
+top:50%;
+
+
+left:50%;
+
+
+transform:
+
+translate(-50%,-50%);
+
+
+padding:25px;
+
+
+border-radius:12px;
+
+
+}
+
+
+
+#close-dashboard {
+
+
+float:right;
+
+
+border:none;
+
+
+font-size:24px;
+
+
+background:none;
+
+
+cursor:pointer;
+
+
+}
+
+
+
+.dashboard-item {
+
+
+margin:12px 0;
+
+
+padding:10px;
+
+
+background:#f5f5f5;
+
+
+border-radius:8px;
+
+
+}
+
+
+.header-buttons {
+
+display:flex;
+
+align-items:center;
+
+margin-left:auto;
+
+}
+
+
+
+#dashboard-btn {
+
+
+font-size:18px;
+
+
+font-weight:bold;
+
+
+color:white;
+
+
+cursor:pointer;
+
+
+padding:8px 15px;
+
+
+}
+
+
+
+#dashboard-btn:hover {
+
+
+opacity:0.8;
+
+
+}
+
+header {
+
+height:60px;
+
+display:flex;
+
+align-items:center;
+
+padding:0 25px;
+
+background:#3f6fd9;
+
+color:white;
+
+}
+
+/* =====================
+地图sidebar按钮
+===================== */
+
+
+#toggle-sidebar {
+
+
+position:fixed;
+
+
+top:85px;
+
+
+left:15px;
+
+
+z-index:2000;
+
+
+width:40px;
+
+
+height:40px;
+
+
+background:white;
+
+
+border:none;
+
+
+border-radius:6px;
+
+
+font-size:24px;
+
+
+cursor:pointer;
+
+
+box-shadow:
+0 2px 6px rgba(0,0,0,0.3);
+
+
+}
+
+/* =====================
+Feedback 管理
+===================== */
+
+
+#feedback-modal {
+
+
+display:none;
+
+
+position:fixed;
+
+
+top:0;
+
+
+left:0;
+
+
+width:100%;
+
+
+height:100%;
+
+
+background:
+rgba(0,0,0,0.4);
+
+
+z-index:5000;
+
+
+}
+
+
+
+
+.feedback-box {
+
+
+background:white;
+
+
+width:90%;
+
+
+max-height:85vh;
+
+
+overflow:auto;
+
+
+position:absolute;
+
+
+top:50%;
+
+
+left:50%;
+
+
+transform:
+translate(-50%,-50%);
+
+
+padding:25px;
+
+
+border-radius:12px;
+
+
+}
+
+
+#dashboard-btn,
+#feedback-btn,
+#facility-btn {
+
+
+font-size:18px;
+
+font-weight:bold;
+
+color:white;
+
+cursor:pointer;
+
+padding:8px 15px;
+
+
+}
+
+
+#dashboard-btn:hover,
+#feedback-btn:hover,
+#facility-btn:hover {
+
+
+opacity:0.8;
+
+
+}
+
+
+
+.feedback-table {
+
+
+width:100%;
+
+
+border-collapse:collapse;
+
+
+}
+
+
+
+.feedback-table td,
+.feedback-table th {
+
+
+padding:10px;
+
+
+border-bottom:1px solid #ddd;
+
+
+}
+
+
+
+.status-btn {
+
+
+cursor:pointer;
+
+
+}
+
+.facility-table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+
+
+.facility-table th,
+.facility-table td{
+
+
+border-bottom:1px solid #ddd;
+
+padding:8px;
+
+text-align:left;
+
+
+}
+
+
+
+.facility-table th{
+
+background:#f2f2f2;
+
+}
+
+#facility-modal {
+
+
+display:none;
+
+
+position:fixed;
+
+
+top:0;
+
+left:0;
+
+
+width:100%;
+
+height:100%;
+
+
+background:
+rgba(0,0,0,0.4);
+
+
+z-index:9999;
+
+
+}
+
+
+.facility-box{
+
+
+background:white;
+
+
+position:absolute;
+
+
+top:50%;
+
+
+left:50%;
+
+
+transform:
+translate(-50%,-50%);
+
+
+width:700px;
+
+
+max-height:80vh;
+
+
+overflow:auto;
+
+
+padding:20px;
+
+
+border-radius:10px;
+
+
+}
+
+/* =====================
+设施管理表格
+===================== */
+
+
+.facility-table{
+
+
+width:100%;
+
+border-collapse:collapse;
+
+
+}
+
+
+
+.facility-table th{
+
+
+background:#f5f5f5;
+
+
+font-weight:bold;
+
+
+}
+
+
+
+.facility-table th,
+.facility-table td{
+
+
+padding:10px;
+
+
+border-bottom:
+
+1px solid #ddd;
+
+
+text-align:left;
+
+
+}
+
+
+
+.delete-btn{
+
+
+background:#dc3545;
+
+
+color:white;
+
+
+border:none;
+
+
+padding:
+
+5px 10px;
+
+
+border-radius:5px;
+
+
+cursor:pointer;
+
+
+}
+
+
+
+.delete-btn:hover{
+
+
+opacity:0.8;
+
+
+}
+
+.facility-toolbar{
+
+
+display:flex;
+
+gap:10px;
+
+margin-bottom:15px;
+
+
+}
+
+
+.facility-toolbar input,
+.facility-toolbar select{
+
+
+padding:8px;
+
+
+}
+
+
+
+.facility-edit-modal{
+
+
+display:none;
+
+
+}
+
+
+
+#facility-edit-modal{
+
+
+display:none;
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:
+
+rgba(0,0,0,.4);
+
+z-index:10000;
+
+
+}
+
+
+
+#facility-edit-modal .facility-box{
+
+
+background:white;
+
+width:400px;
+
+padding:20px;
+
+position:absolute;
+
+top:50%;
+
+left:50%;
+
+transform:
+
+translate(-50%,-50%);
+
+
+}
+
+
+
+.facility-box input,
+.facility-box textarea,
+.facility-box select{
+
+
+width:100%;
+
+margin-bottom:10px;
+
+
+}
+
+#pick-location{
+
+
+background:#3f6fd9;
+
+color:white;
+
+border:none;
+
+padding:8px 15px;
+
+border-radius:6px;
+
+cursor:pointer;
+
+margin-bottom:10px;
+
+}
+
+#location-tip{
+
+display:none;
+
+position:fixed;
+
+top:80px;
+
+right:30px;
+
+background:white;
+
+padding:10px 20px;
+
+border-radius:8px;
+
+z-index:3000;
+
+box-shadow:0 2px 8px rgba(0,0,0,.3);
+
+font-weight:bold;
+
+}
+
+/* =====================
+反馈管理弹窗
+===================== */
+
+
+#feedback-modal,
+#feedback-detail-modal {
+
+
+    display:none;
+
+
+    position:fixed;
+
+
+    top:0;
+
+    left:0;
+
+
+    width:100%;
+
+    height:100%;
+
+
+    background:
+    rgba(0,0,0,0.4);
+
+
+    z-index:3000;
+
+
+}
+
+
+
+.feedback-box {
+
+
+    background:white;
+
+
+    width:700px;
+
+
+    max-height:80vh;
+
+
+    overflow:auto;
+
+
+    position:absolute;
+
+
+    top:50%;
+
+
+    left:50%;
+
+
+    transform:
+    translate(-50%,-50%);
+
+
+    padding:25px;
+
+
+    border-radius:10px;
+
+
+}
+
+
+
+.feedback-table {
+
+
+    width:100%;
+
+
+    border-collapse:collapse;
+
+
+}
+
+
+
+.feedback-table th,
+.feedback-table td {
+
+
+    border-bottom:
+    1px solid #ddd;
+
+
+    padding:10px;
+
+
+    text-align:left;
+
+
+}
+
+/* ===================
+ Feedback Management
+=================== */
+
+
+#feedback-modal,
+#feedback-detail-modal {
+
+
+display:none;
+
+
+position:fixed;
+
+
+top:0;
+
+left:0;
+
+
+width:100%;
+
+height:100%;
+
+
+background:
+rgba(0,0,0,.4);
+
+
+z-index:3000;
+
+
+}
+
+
+
+.feedback-box {
+
+
+background:white;
+
+
+width:750px;
+
+
+max-height:80vh;
+
+
+overflow:auto;
+
+
+position:absolute;
+
+
+top:50%;
+
+
+left:50%;
+
+
+transform:
+translate(-50%,-50%);
+
+
+padding:25px;
+
+
+border-radius:12px;
+
+
+}
+
+
+
+.feedback-table {
+
+
+width:100%;
+
+
+border-collapse:collapse;
+
+
+}
+
+
+
+.feedback-table th,
+.feedback-table td {
+
+
+padding:10px;
+
+
+border-bottom:
+1px solid #ddd;
+
+
+}
+
+
+
+.feedback-table button {
+
+
+margin-right:5px;
+
+
+}
+
+
+.feedback-status {
+
+
+padding:5px;
+
+
+}
+
+/* Dashboard */
+
+.dashboard-cards{
+
+display:flex;
+
+gap:20px;
+
+flex-wrap:wrap;
+
+}
+
+
+.dashboard-card{
+
+
+background:#f5f5f5;
+
+
+padding:20px;
+
+
+border-radius:10px;
+
+
+width:150px;
+
+
+text-align:center;
+
+
+}
+
+
+
+.dashboard-card p{
+
+
+font-size:30px;
+
+
+font-weight:bold;
+
+
+margin:10px;
+
+
+}
+
+
+#feedback-category-chart,
+#facility-category-chart{
+
+
+max-height:300px;
+
+
+margin-bottom:30px;
+
+
+}
+
+.status-filter {
+
+    margin: 10px 0 15px 0;
+
+}
+
+.status-filter label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 14px;
+
+    color: #555;
+
+}
+
+.status-filter select {
+
+    width: 100%;
+
+    padding: 7px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 5px;
+
+    background: white;
+
+}
+
+.feedback-marker {
+
+    width: 16px;
+    height: 16px;
+
+    border-radius: 50%;
+
+    border: 2px solid white;
+
+    box-shadow:
+    0 1px 5px rgba(0, 0, 0, 0.45);
+
+    cursor: pointer;
+
+}
+
+/* =====================
+Dashboard 导出按钮
+===================== */
+
+
+.dashboard-export{
+
+
+margin-top:25px;
+
+
+padding-top:15px;
+
+
+border-top:1px solid #eee;
+
+
+}
+
+
+
+.dashboard-export button{
+
+
+margin-right:12px;
+
+
+padding:8px 15px;
+
+
+border:none;
+
+
+border-radius:6px;
+
+
+background:#2c7be5;
+
+
+color:white;
+
+
+cursor:pointer;
+
+
+font-size:14px;
+
+
+}
+
+
+
+.dashboard-export button:hover{
+
+
+opacity:0.85;
+
+
+}
+
+.feedback-photo {
+
+
+margin:15px 0;
+
+
+text-align:center;
+
+
+}
+
+
+
+.feedback-photo img {
+
+
+max-width:100%;
+
+
+max-height:300px;
+
+
+border-radius:8px;
+
+
+object-fit:cover;
+
+
+box-shadow:
+0 2px 8px rgba(0,0,0,0.2);
+
+
+}
+
+.feedback-popup-image{
+
+
+width:180px;
+
+
+height:120px;
+
+
+object-fit:cover;
+
+
+border-radius:8px;
+
+
+margin:8px 0;
 
 
 }

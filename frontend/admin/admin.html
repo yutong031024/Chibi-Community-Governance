@@ -14,45 +14,124 @@
 </title>
 
 
+
+<!-- =========================
+     AMap JS API 安全配置
+========================= -->
+
+<script>
+
+window._AMapSecurityConfig = {
+
+    securityJsCode:
+    "{{AMAP_JS_SECURITY_CODE}}"
+
+};
+
+</script>
+
+<script src="https://webapi.amap.com/maps?v=2.0&key={{AMAP_JS_KEY}}&plugin=AMap.HeatMap"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <link rel="stylesheet"
 href="/admin/admin.css">
-
-
-
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet/dist/leaflet.css">
-
-
-
-<script src="
-https://unpkg.com/leaflet/dist/leaflet.js">
-</script>
 
 
 </head>
 
 
+
 <body>
+
+    <div id="location-tip">
+    📍 当前模式：选择设施位置
+    </div>
+
+
+<!-- =========================
+     顶部栏
+========================= -->
 
 
 <header>
+
 
 <h1>
 赤壁民生服务管理后台
 </h1>
 
-<button id="toggle-sidebar">
-☰
-</button>
+
+
+<div class="header-buttons">
+
+
+<span id="dashboard-btn">
+
+数据概览
+
+</span>
+
+
+<span id="feedback-btn">
+
+反馈管理
+
+</span>
+
+<span id="facility-btn">
+
+设施管理
+
+</span>
+
+
+</div>
+
+
 
 </header>
 
 
 
 
-<!-- 图层侧边栏 -->
+
+<!-- =========================
+     Sidebar按钮
+========================= -->
+
+
+<button id="toggle-sidebar">
+
+☰
+
+</button>
+
+
+
+
+
+<!-- =========================
+     地图
+========================= -->
+
+
+<div id="map">
+
+</div>
+
+
+
+
+
+
+<!-- =========================
+     图层侧边栏
+========================= -->
+
 
 <div id="sidebar">
+
 
 
 <h2>
@@ -62,11 +141,57 @@ https://unpkg.com/leaflet/dist/leaflet.js">
 
 
 <h3>
-📍 反馈问题
+反馈问题
 </h3>
 
+<div class="layer-item">
 
-<div id="feedback-layers"></div>
+<input
+type="checkbox"
+id="heatmap-toggle"
+>
+
+<label for="heatmap-toggle">
+
+反馈热力图
+
+</label>
+
+</div>
+
+<div class="status-filter">
+
+<label for="feedback-map-status">
+处理状态
+</label>
+
+<select id="feedback-map-status">
+
+<option value="">
+全部状态
+</option>
+
+<option value="未处理">
+未处理
+</option>
+
+<option value="处理中">
+处理中
+</option>
+
+<option value="已处理">
+已处理
+</option>
+
+</select>
+
+</div>
+
+
+<div id="feedback-layers">
+
+</div>
+
 
 
 
@@ -75,12 +200,106 @@ https://unpkg.com/leaflet/dist/leaflet.js">
 
 
 
+
+
 <h3>
-🏢 服务设施
+服务设施
 </h3>
 
+<div class="coverage-control">
 
-<div id="facility-layers"></div>
+
+<h4>
+设施覆盖分析
+</h4>
+
+
+<label>
+设施类别
+</label>
+
+
+<select id="coverage-category">
+
+
+<option value="医疗设施">
+医疗设施
+</option>
+
+
+<option value="交通设施">
+交通设施
+</option>
+
+
+<option value="商业设施">
+商业设施
+</option>
+
+
+<option value="公共设施">
+公共设施
+</option>
+
+
+<option value="教育设施">
+教育设施
+</option>
+
+
+</select>
+
+
+
+<label>
+覆盖半径（米）
+</label>
+
+
+<input
+
+type="number"
+
+id="coverage-radius"
+
+value="1000"
+
+min="100"
+
+step="100"
+
+>
+
+
+
+<div>
+
+
+<input
+
+type="checkbox"
+
+id="facility-coverage-toggle"
+
+>
+
+
+<label>
+
+显示覆盖范围
+
+</label>
+
+
+</div>
+
+
+</div>
+
+<div id="facility-layers">
+
+</div>
+
 
 
 
@@ -90,10 +309,364 @@ https://unpkg.com/leaflet/dist/leaflet.js">
 
 
 
-<div id="map"></div>
+
+<!-- =========================
+     Dashboard弹窗
+========================= -->
+
+<!-- Feedback Modal -->
+
+<div id="feedback-modal">
+
+
+<div class="feedback-box">
+
+
+<button id="close-feedback">
+×
+</button>
+
+
+<h2>
+反馈管理
+</h2>
+
+
+<div class="feedback-filter">
+
+
+<select id="feedback-filter-status">
+
+<option value="">
+全部状态
+</option>
+
+<option value="未处理">
+未处理
+</option>
+
+<option value="处理中">
+处理中
+</option>
+
+<option value="已处理">
+已处理
+</option>
+
+
+</select>
+
+
+</div>
 
 
 
+<div id="feedback-table">
+
+
+加载中...
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- Feedback Detail -->
+
+<div id="feedback-detail-modal">
+
+
+<div class="feedback-box">
+
+
+<button id="close-feedback-detail">
+×
+</button>
+
+
+<h2>
+反馈详情
+</h2>
+
+
+<div id="feedback-detail-content">
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+<!-- 反馈管理 -->
+
+<div id="feedback-modal">
+
+
+<div class="feedback-box">
+
+
+<button id="close-feedback">
+
+×
+
+</button>
+
+
+
+<h2>
+
+反馈管理
+
+</h2>
+
+
+
+<div class="feedback-toolbar">
+
+
+<input
+
+id="feedback-search"
+
+placeholder="搜索反馈内容"
+
+
+>
+
+
+
+<select id="feedback-status-filter">
+
+
+<option value="">
+
+全部状态
+
+</option>
+
+
+<option>
+
+未处理
+
+</option>
+
+
+<option>
+
+处理中
+
+</option>
+
+
+<option>
+
+已处理
+
+</option>
+
+
+</select>
+
+
+
+</div>
+
+
+
+<div id="feedback-table">
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- 反馈详情 -->
+
+
+<div id="feedback-detail-modal">
+
+
+<div class="feedback-box">
+
+
+
+<button id="close-feedback-detail">
+
+×
+
+</button>
+
+
+
+<h2>
+
+反馈详情
+
+</h2>
+
+
+
+<div id="feedback-detail">
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+<div id="dashboard-modal">
+
+
+
+<div class="dashboard-box">
+
+
+
+<button id="close-dashboard">
+
+×
+
+
+</button>
+
+
+
+
+<h2>
+
+数据概览
+
+</h2>
+
+
+
+
+
+<div id="dashboard-content">
+
+
+<div class="dashboard-cards">
+
+
+<div class="dashboard-card">
+
+<h3>
+总反馈
+</h3>
+
+<p id="total-feedback">
+0
+</p>
+
+</div>
+
+
+
+<div class="dashboard-card">
+
+<h3>
+未处理
+</h3>
+
+<p id="pending-feedback">
+0
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>
+处理中
+</h3>
+
+<p id="processing-feedback">
+0
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>
+已处理
+</h3>
+
+<p id="completed-feedback">
+0
+</p>
+
+</div>
+
+</div>
+
+
+<h3>
+反馈类别
+</h3>
+
+<canvas id="feedback-category-chart"></canvas>
+<canvas id="feedback-status-chart"></canvas>
+
+<!-- 数据导出 -->
+
+<div class="dashboard-export">
+
+
+<h3>
+数据导出
+</h3>
+
+
+<button id="export-feedback-btn">
+
+导出反馈数据 CSV
+
+</button>
+
+
+
+<button id="export-facility-btn">
+
+导出设施数据 CSV
+
+</button>
+
+
+</div>
+</div>
+
+
+
+
+
+</div>
+
+
+</div>
 
 
 <script src="/admin/admin.js"></script>
@@ -103,3 +676,294 @@ https://unpkg.com/leaflet/dist/leaflet.js">
 
 
 </html>
+
+<!-- Feedback 管理弹窗 -->
+
+
+<div id="feedback-modal">
+
+
+<div class="feedback-box">
+
+
+<button id="close-feedback">
+
+×
+
+
+</button>
+
+
+
+<h2>
+
+反馈管理
+
+</h2>
+
+
+
+<div id="feedback-table">
+
+加载中...
+
+</div>
+
+
+</div>
+
+
+</div>
+
+<div id="facility-modal">
+
+
+<div class="facility-box">
+
+
+<button id="close-facility">
+×
+</button>
+
+
+<h2>
+设施管理
+</h2>
+
+
+
+<div class="facility-toolbar">
+
+
+<button id="add-facility-btn">
++ 添加设施
+</button>
+
+
+
+<input 
+id="facility-search"
+placeholder="搜索设施名称..."
+>
+
+
+
+<select id="facility-filter">
+
+
+<option value="">
+全部类别
+</option>
+
+
+<option>
+医疗设施
+</option>
+
+
+<option>
+交通设施
+</option>
+
+
+<option>
+商业设施
+</option>
+
+
+<option>
+物流设施
+</option>
+
+
+<option>
+公共设施
+</option>
+
+
+<option>
+文化设施
+</option>
+
+
+<option>
+教育设施
+</option>
+
+
+<option>
+无障碍设施
+</option>
+
+
+<option>
+环境卫生
+</option>
+
+
+<option>
+其他
+</option>
+
+
+</select>
+
+
+
+</div>
+
+
+
+<div id="facility-table"></div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- 添加/编辑设施 -->
+
+
+<div id="facility-edit-modal">
+
+
+<div class="facility-box">
+
+
+<button id="close-edit-facility">
+×
+</button>
+
+
+<h2>
+编辑设施
+</h2>
+
+
+
+<input id="facility-id" hidden>
+
+
+
+<label>
+名称
+</label>
+
+<input id="facility-name">
+
+
+
+<label>
+类别
+</label>
+
+<select id="facility-category">
+
+<option>
+医疗设施
+</option>
+
+<option>
+交通设施
+</option>
+
+<option>
+商业设施
+</option>
+
+<option>
+物流设施
+</option>
+
+<option>
+公共设施
+</option>
+
+<option>
+文化设施
+</option>
+
+<option>
+教育设施
+</option>
+
+<option>
+无障碍设施
+</option>
+
+<option>
+环境卫生
+</option>
+
+<option>
+其他
+</option>
+
+</select>
+
+
+
+<label>
+地址
+</label>
+
+<input id="facility-address">
+
+
+
+<label>
+描述
+</label>
+
+<textarea id="facility-description"></textarea>
+
+<button id="pick-location">
+
+地图选点
+
+</button>
+
+
+<p>
+
+经度：
+
+<span id="facility-lng">
+
+暂无
+
+</span>
+
+</p>
+
+
+<p>
+
+纬度：
+
+<span id="facility-lat">
+
+暂无
+
+</span>
+
+</p>
+
+
+
+<button id="save-facility">
+保存
+</button>
+
+
+
+</div>
+
+</div>
+
+<button id="close-facility-detail">
+×
+</button>
